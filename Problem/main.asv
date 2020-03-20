@@ -1,0 +1,26 @@
+%% Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions
+%% Power consumption
+% In this section it is of interest to compare the power consumption between
+% the different light duty urban vehicles presented in the figures (1), (2),
+% (3) and (4) of the Lab script. To compare these, it is used two diferent
+% driving cycles:
+%
+% <html><h3>Basic urbarn driving cycle</h3></html> 
+clear
+clc
+[basic_time, basic_velocity] = BasicDrivingCycle();
+figure();
+plot(basic_time, basic_velocity);
+grid on;
+title('Basic urban driving cycle');
+xlabel('time [s]');
+ylabel('Velocity [v]');
+% <html><h3>Basic urbarn driving cycle</h3></html> 
+[mix_time, mix_velocity] = MixDrivingCycle(basic_time, basic_velocity);
+figure()
+plot(mix_time, mix_velocity);
+grid on;
+title('Basic urban driving cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Velocity [$v$]','Interpreter', 'latex');
+
