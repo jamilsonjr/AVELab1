@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Driving cycles</a></li><li><a href="#3">Power consumption</a></li></ul></div><h2 id="1">Driving cycles</h2><p>In order to perform this study, the driving cycles were ploted in matLab. Two types of driving cycles were used:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
+  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Driving cycles</a></li><li><a href="#3">Vehicles Configurations and assumptions</a></li><li><a href="#11">Power consumption</a></li></ul></div><h2 id="1">Driving cycles</h2><p>In order to perform this study, the driving cycles were ploted in matLab. Two types of driving cycles were used:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
 close <span class="string">all</span>
 clc
 [basic_time, basic_velocity] = BasicDrivingCycle();
@@ -83,7 +83,7 @@ grid <span class="string">on</span>;
 title(<span class="string">'Basic urban driving cycle'</span>);
 xlabel(<span class="string">'time $[s]$'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
 ylabel(<span class="string">'Velocity [$v$]'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
-</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2 id="3">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different light duty urban vehicles presented in the figures (1), (2), (3) and (4) of the Lab script.</p><p>The objective os to calculate:</p><p><img src="main_eq11972308033256455837.png" alt="$$ P_T = F_Tv $$" style="width:62px;height:13px;"></p><p>So first one must consider the traction force <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;"> on each car. The forces present are:</p><div><ul><li>Motor force;</li><li>Drag force;</li><li>Friction force;</li></ul></div><p><img src="main_eq06805382735451311472.png" alt="$$ F_T = f_m m a + F_{drag} + F_{friction}$$" style="width:188px;height:15px;"></p><p>Being:</p><div><ul><li><img src="main_eq16605206614134704508.png" alt="$F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$" style="width:187px;height:18px;"></li><li><img src="main_eq06929708968619120145.png" alt="$F_{friction} = C_{rr} m g v$" style="width:115px;height:15px;"></li></ul></div><p><img src="main_eq02096491867029288159.png" alt="$f_m \rightarrow mass factor$" style="width:116px;height:13px;">; <img src="main_eq16845101826378195034.png" alt="$\rho\rightarrow$" style="width:25px;height:11px;"> densidade do meio; <img src="main_eq14285667881860132363.png" alt="$C_d\rightarrow$" style="width:34px;height:13px;"> aerodynamic drag coefficient; A <img src="main_eq11499031656375046629.png" alt="$\rightarrow$" style="width:13px;height:8px;"> frontal surface area; <img src="main_eq16876173721317610001.png" alt="$v_w\rightarrow$" style="width:33px;height:10px;"> wind speed; <img src="main_eq17774575464225102567.png" alt="$C_{rr}\rightarrow$" style="width:39px;height:13px;"> rolling resistance coefficient; <img src="main_eq11319871188381094158.png" alt="$m$" style="width:13px;height:7px;"> and <img src="main_eq07585311203459331132.png" alt="$g$" style="width:7px;height:10px;"> mass a gravity; Having the evolution of the velocity.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2 id="3">Vehicles Configurations and assumptions</h2><p>In the study there are 4 possible configurations of  light duty urban vehicles, presented in the figures (1), (2), (3) and (4). They consist of pure eletric, pure combustion, series hybrid and paralel hybrid.</p><p><h3>Pure Eletric Powertrain</h3></p><p>In this configuration the battery in series with the eletric motor/generator in series with the transmission. There are two possible modes of functioning, the motor discharging the batteries while accelerating, and the opposite, generator charging the batteries decelerating.</p><p><b>Acceleration:</b> During discharge the ciruit has an efficiency different of 100%. The overalll efficiecy <img src="main_eq16886558483641580768.png" alt="$\eta_{overall}$" style="width:39px;height:10px;"> is given by the product of the individual effinciency of each component of the circuit</p><p><img src="main_eq14504939581921429051.png" alt="$\eta_{overall}=\prod_{i=1}\eta_i$" style="width:103px;height:15px;">.</p><p>Thus, for this powertrain, one has that [$battery \rightarrow motor \rightarrow transmission$] will translate in a overall efficiency given by:</p><p><img src="main_eq05150811538145122500.png" alt="$\eta_{overall}=\eta_{battery}\eta_{motor}\eta_{transmission}$" style="width:204px;height:11px;"></p><div><ul><li>Assuming that the batteries are made from lithium-ion, according to <a href="https://en.wikipedia.org/wiki/Lithium-ion_battery">https://en.wikipedia.org/wiki/Lithium-ion_battery</a> it is reasonable to assume that the discharging effinciency of the battery of around 90%.</li><li>From <a href="https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency">https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency</a> it is reasonable to assume that the eletric motor has an efficiency of 70%.</li><li>From <a href="https://www.nap.edu/read/21744/chapter/7">https://www.nap.edu/read/21744/chapter/7</a> it is resonable to assume that the effinciecy of an automatic transmission is 90%.</li></ul></div><p>Thus the eletric power in acceleration is given by:</p><p><img src="main_eq04195045969737193135.png" alt="$$Tesitng$$" style="width:50px;height:13px;"></p><h2 id="11">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different vehicles.</p><p>The objective os to calculate:</p><p><img src="main_eq11972308033256455837.png" alt="$$ P_T = F_Tv $$" style="width:62px;height:13px;"></p><p>So first one must consider the traction force <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;"> on each car. The forces present are:</p><div><ul><li>Motor force;</li><li>Drag force;</li><li>Friction force;</li></ul></div><p><img src="main_eq06805382735451311472.png" alt="$$ F_T = f_m m a + F_{drag} + F_{friction}$$" style="width:188px;height:15px;"></p><p>Being:</p><div><ul><li><img src="main_eq16605206614134704508.png" alt="$F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$" style="width:187px;height:18px;"></li><li><img src="main_eq06929708968619120145.png" alt="$F_{friction} = C_{rr} m g v$" style="width:115px;height:15px;"></li></ul></div><p><img src="main_eq02096491867029288159.png" alt="$f_m \rightarrow mass factor$" style="width:116px;height:13px;">; <img src="main_eq16845101826378195034.png" alt="$\rho\rightarrow$" style="width:25px;height:11px;"> densidade do meio; <img src="main_eq14285667881860132363.png" alt="$C_d\rightarrow$" style="width:34px;height:13px;"> aerodynamic drag coefficient; A <img src="main_eq11499031656375046629.png" alt="$\rightarrow$" style="width:13px;height:8px;"> frontal surface area; <img src="main_eq16876173721317610001.png" alt="$v_w\rightarrow$" style="width:33px;height:10px;"> wind speed; <img src="main_eq17774575464225102567.png" alt="$C_{rr}\rightarrow$" style="width:39px;height:13px;"> rolling resistance coefficient; <img src="main_eq11319871188381094158.png" alt="$m$" style="width:13px;height:7px;"> and <img src="main_eq07585311203459331132.png" alt="$g$" style="width:7px;height:10px;"> mass a gravity;</p><p>Considering <img src="main_eq12429941046748248203.png" alt="$f_m = 1.05$" style="width:61px;height:13px;"> and using the constant values from the table(I) of the laboratory script, one can compute the values of <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;">.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions
 %% Driving cycles
@@ -116,10 +116,45 @@ title('Basic urban driving cycle');
 xlabel('time $[s]$','Interpreter', 'latex');
 ylabel('Velocity [$v$]','Interpreter', 'latex');
 
+%% Vehicles Configurations and assumptions
+% In the study there are 4 possible configurations of  light duty urban vehicles, presented in
+% the figures (1), (2), (3) and (4). They consist of pure eletric, pure
+% combustion, series hybrid and paralel hybrid.
+%
+% <html><h3>Pure Eletric Powertrain</h3></html>
+% 
+% In this configuration the battery in series with the eletric
+% motor/generator in series with the transmission.
+% There are two possible modes of functioning, the motor discharging the
+% batteries while accelerating, and the opposite, generator charging the batteries decelerating.
+%% 
+% *Acceleration:*
+% During discharge the ciruit has an efficiency different of 100%. The overalll
+% efficiecy $\eta_{overall}$ is given by the product of the individual effinciency of
+% each component of the circuit
+%%
+% $\eta_{overall}=\prod_{i=1}\eta_i$. 
+%%
+% Thus, for this powertrain, one has that [$battery \rightarrow motor
+% \rightarrow transmission$] will translate in a overall efficiency given
+% by: 
+%%
+% $\eta_{overall}=\eta_{battery}\eta_{motor}\eta_{transmission}$
+%% 
+% * Assuming that the batteries are made from lithium-ion, according to
+% <https://en.wikipedia.org/wiki/Lithium-ion_battery> it is reasonable to assume that
+% the discharging effinciency of the battery of around 90%.
+% * From <https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency> it
+% is reasonable to assume that the eletric motor has an efficiency of 70%.
+% * From <https://www.nap.edu/read/21744/chapter/7> it is resonable to
+% assume that the effinciecy of an automatic transmission is 90%.
+%% 
+% Thus the eletric power in acceleration is given by:
+%% 
+% $$Tesitng$$
 %% Power consumption
 % In this section it is of interest to compare the power consumption between
-% the different light duty urban vehicles presented in the figures (1), (2),
-% (3) and (4) of the Lab script.
+% the different vehicles.
 % 
 % The objective os to calculate:
 %% 
@@ -143,7 +178,11 @@ ylabel('Velocity [$v$]','Interpreter', 'latex');
 % $C_d\rightarrow$ aerodynamic drag coefficient; A $\rightarrow$ frontal 
 % surface area; $v_w\rightarrow$ wind speed; $C_{rr}\rightarrow$ rolling  
 % resistance coefficient; $m$ and $g$ mass a gravity;
-% Having the evolution of the velocity.
+%%
+% Considering $f_m = 1.05$ and using the constant values from the table(I) of the
+% laboratory script, one can compute the values of $F_T$.
+
+
 
 ##### SOURCE END #####
 --></body></html>
