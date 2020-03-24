@@ -1,3 +1,4 @@
+%% This is a test for the publish
 function [time, velocity] = MixDrivingCycle(basic_time, basic_velocity) 
     % time & velocity
     time = basic_time;

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-20"><meta name="DC.source" content="main.m"><style type="text/css">
+      --><title>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-24"><meta name="DC.source" content="main.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,8 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Power consumption</a></li></ul></div><h2 id="1">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different light duty urban vehicles presented in the figures (1), (2), (3) and (4) of the Lab script. To compare these, it is used two diferent driving cycles:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
+  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Driving cycles</a></li><li><a href="#3">Power consumption</a></li></ul></div><h2 id="1">Driving cycles</h2><p>In order to perform this study, the driving cycles were ploted in matLab. Two types of driving cycles were used:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
+close <span class="string">all</span>
 clc
 [basic_time, basic_velocity] = BasicDrivingCycle();
 figure();
@@ -82,18 +83,17 @@ grid <span class="string">on</span>;
 title(<span class="string">'Basic urban driving cycle'</span>);
 xlabel(<span class="string">'time $[s]$'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
 ylabel(<span class="string">'Velocity [$v$]'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
-</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2 id="3">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different light duty urban vehicles presented in the figures (1), (2), (3) and (4) of the Lab script.</p><p>The objective os to calculate:</p><p><img src="main_eq11972308033256455837.png" alt="$$ P_T = F_Tv $$" style="width:62px;height:13px;"></p><p>So first one must consider the traction force <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;"> on each car. The forces present are:</p><div><ul><li>Motor force;</li><li>Drag force;</li><li>Friction force;</li></ul></div><p><img src="main_eq06805382735451311472.png" alt="$$ F_T = f_m m a + F_{drag} + F_{friction}$$" style="width:188px;height:15px;"></p><p>Being:</p><div><ul><li><img src="main_eq16605206614134704508.png" alt="$F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$" style="width:187px;height:18px;"></li><li><img src="main_eq06929708968619120145.png" alt="$F_{friction} = C_{rr} m g v$" style="width:115px;height:15px;"></li></ul></div><p><img src="main_eq02096491867029288159.png" alt="$f_m \rightarrow mass factor$" style="width:116px;height:13px;">; <img src="main_eq16845101826378195034.png" alt="$\rho\rightarrow$" style="width:25px;height:11px;"> densidade do meio; <img src="main_eq14285667881860132363.png" alt="$C_d\rightarrow$" style="width:34px;height:13px;"> aerodynamic drag coefficient; A <img src="main_eq11499031656375046629.png" alt="$\rightarrow$" style="width:13px;height:8px;"> frontal surface area; <img src="main_eq16876173721317610001.png" alt="$v_w\rightarrow$" style="width:33px;height:10px;"> wind speed; <img src="main_eq17774575464225102567.png" alt="$C_{rr}\rightarrow$" style="width:39px;height:13px;"> rolling resistance coefficient; <img src="main_eq11319871188381094158.png" alt="$m$" style="width:13px;height:7px;"> and <img src="main_eq07585311203459331132.png" alt="$g$" style="width:7px;height:10px;"> mass a gravity; Having the evolution of the velocity.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions
-%% Power consumption
-% In this section it is of interest to compare the power consumption between
-% the different light duty urban vehicles presented in the figures (1), (2),
-% (3) and (4) of the Lab script. To compare these, it is used two diferent
-% driving cycles:
+%% Driving cycles
+% In order to perform this study, the driving cycles were ploted in matLab.
+% Two types of driving cycles were used:
 %
 % <html><h3>Basic urbarn driving cycle</h3></html> 
 %
 clear
+close all
 clc
 [basic_time, basic_velocity] = BasicDrivingCycle();
 figure();
@@ -116,6 +116,34 @@ title('Basic urban driving cycle');
 xlabel('time $[s]$','Interpreter', 'latex');
 ylabel('Velocity [$v$]','Interpreter', 'latex');
 
+%% Power consumption
+% In this section it is of interest to compare the power consumption between
+% the different light duty urban vehicles presented in the figures (1), (2),
+% (3) and (4) of the Lab script.
+% 
+% The objective os to calculate:
+%% 
+% $$ P_T = F_Tv $$
+%%
+% So first one must consider the traction force $F_T$ on each car. The
+% forces present are:
+%%
+% * Motor force;
+% * Drag force;
+% * Friction force;
+%% 
+% $$ F_T = f_m m a + F_{drag} + F_{friction}$$
+%%
+% Being:
+%%
+% * $F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$
+% * $F_{friction} = C_{rr} m g v$ 
+%% 
+% $f_m \rightarrow mass factor$; $\rho\rightarrow$ densidade do meio; 
+% $C_d\rightarrow$ aerodynamic drag coefficient; A $\rightarrow$ frontal 
+% surface area; $v_w\rightarrow$ wind speed; $C_{rr}\rightarrow$ rolling  
+% resistance coefficient; $m$ and $g$ mass a gravity;
+% Having the evolution of the velocity.
 
 ##### SOURCE END #####
 --></body></html>
