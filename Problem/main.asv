@@ -114,8 +114,8 @@ efficiency_pure_eletric_charging = efficiency_battery_charge*efficiency_generato
 %%
 % Thus the overall performance is given by:
 %%
-% * $\eta_{overall} = \eta_{overall-eletric}$, when $v<50 km/h$
-% * $\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$, when $v>50 km/h$
+% * $\eta_{overall} = \eta_{overall-eletric}$, $when $v<50 km/h$
+% * $\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$when $v>50 km/h$
 efficiency_diesel_motor = 0.46;
 effienciency_hybrid_series_eletric_charging = efficiency_pure_eletric_charging;
 effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
@@ -147,13 +147,8 @@ effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_dischar
 % * The eletric path has the same efficiency as the pure eletric
 % powertrain.
 effienciency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
-effienciency_hybrid_parallel_combustion_discharging = efficiency_diesel_motor;
-%%
-%
-% <html><h3>Pure Combustion Powertrain</h3></html>
-% 
-% This powertrain is fairly straight forward, being it's efficiency just
-% the efficiency of the diesel motor.
+effienciency_hybrid_parallel_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
+
 %% Power consumption
 % In this section it is of interest to compare the power consumption between
 % the different powertrains.

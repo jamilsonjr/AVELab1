@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-24"><meta name="DC.source" content="main.m"><style type="text/css">
+      --><title>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-26"><meta name="DC.source" content="main.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Driving cycles</a></li><li><a href="#3">Vehicles Configurations and assumptions</a></li><li><a href="#11">Power consumption</a></li></ul></div><h2 id="1">Driving cycles</h2><p>In order to perform this study, the driving cycles were ploted in matLab. Two types of driving cycles were used:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
+  </style></head><body><div class="content"><h1>Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Driving cycles</a></li><li><a href="#3">Vehicles Configurations and assumptions</a></li><li><a href="#23">Power consumption</a></li></ul></div><h2 id="1">Driving cycles</h2><p>In order to perform this study, the driving cycles were ploted in matLab. Two types of driving cycles were used:</p><p><h3>Basic urbarn driving cycle</h3></p><pre class="codeinput">clear
 close <span class="string">all</span>
 clc
 [basic_time, basic_velocity] = BasicDrivingCycle();
@@ -74,16 +74,30 @@ figure();
 plot(basic_time, basic_velocity);
 grid <span class="string">on</span>;
 title(<span class="string">'Basic urban driving cycle'</span>);
-xlabel(<span class="string">'time [s]'</span>);
-ylabel(<span class="string">'Velocity [v]'</span>);
-</pre><img vspace="5" hspace="5" src="main_01.png" alt=""> <p><h3>Mix driving cycle</h3></p><p>Note that the Mix driving cycle is composed of urban and extra-urban driving cycles, being the first the concatenation of basic urban driving cycles.</p><pre class="codeinput">[mix_time, mix_velocity] = MixDrivingCycle(basic_time, basic_velocity);
+xlabel(<span class="string">'time $[s]$'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
+ylabel(<span class="string">'Velocity [$km/h$]'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
+</pre><img vspace="5" hspace="5" src="main_01.png" alt=""> <p><h3>Mix driving cycle</h3></p><p>Note that the Mix-driving cycle is composed of urban and extra-urban driving cycles, being the first the concatenation of basic urban driving cycles.</p><pre class="codeinput">[mix_time, mix_velocity] = MixDrivingCycle(basic_time, basic_velocity);
 figure()
 plot(mix_time, mix_velocity);
 grid <span class="string">on</span>;
 title(<span class="string">'Basic urban driving cycle'</span>);
 xlabel(<span class="string">'time $[s]$'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
-ylabel(<span class="string">'Velocity [$v$]'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
-</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2 id="3">Vehicles Configurations and assumptions</h2><p>In the study there are 4 possible configurations of  light duty urban vehicles, presented in the figures (1), (2), (3) and (4). They consist of pure eletric, pure combustion, series hybrid and paralel hybrid.</p><p><h3>Pure Eletric Powertrain</h3></p><p>In this configuration the battery in series with the eletric motor/generator in series with the transmission. There are two possible modes of functioning, the motor discharging the batteries while accelerating, and the opposite, generator charging the batteries decelerating.</p><p><b>Acceleration:</b> During discharge the ciruit has an efficiency different of 100%. The overalll efficiecy <img src="main_eq16886558483641580768.png" alt="$\eta_{overall}$" style="width:39px;height:10px;"> is given by the product of the individual effinciency of each component of the circuit</p><p><img src="main_eq14504939581921429051.png" alt="$\eta_{overall}=\prod_{i=1}\eta_i$" style="width:103px;height:15px;">.</p><p>Thus, for this powertrain, one has that [$battery \rightarrow motor \rightarrow transmission$] will translate in a overall efficiency given by:</p><p><img src="main_eq05150811538145122500.png" alt="$\eta_{overall}=\eta_{battery}\eta_{motor}\eta_{transmission}$" style="width:204px;height:11px;"></p><div><ul><li>Assuming that the batteries are made from lithium-ion, according to <a href="https://en.wikipedia.org/wiki/Lithium-ion_battery">https://en.wikipedia.org/wiki/Lithium-ion_battery</a> it is reasonable to assume that the discharging effinciency of the battery of around 90%.</li><li>From <a href="https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency">https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency</a> it is reasonable to assume that the eletric motor has an efficiency of 70%.</li><li>From <a href="https://www.nap.edu/read/21744/chapter/7">https://www.nap.edu/read/21744/chapter/7</a> it is resonable to assume that the effinciecy of an automatic transmission is 90%.</li></ul></div><p>Thus the eletric power in acceleration is given by:</p><p><img src="main_eq04195045969737193135.png" alt="$$Tesitng$$" style="width:50px;height:13px;"></p><h2 id="11">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different vehicles.</p><p>The objective os to calculate:</p><p><img src="main_eq11972308033256455837.png" alt="$$ P_T = F_Tv $$" style="width:62px;height:13px;"></p><p>So first one must consider the traction force <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;"> on each car. The forces present are:</p><div><ul><li>Motor force;</li><li>Drag force;</li><li>Friction force;</li></ul></div><p><img src="main_eq06805382735451311472.png" alt="$$ F_T = f_m m a + F_{drag} + F_{friction}$$" style="width:188px;height:15px;"></p><p>Being:</p><div><ul><li><img src="main_eq16605206614134704508.png" alt="$F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$" style="width:187px;height:18px;"></li><li><img src="main_eq06929708968619120145.png" alt="$F_{friction} = C_{rr} m g v$" style="width:115px;height:15px;"></li></ul></div><p><img src="main_eq02096491867029288159.png" alt="$f_m \rightarrow mass factor$" style="width:116px;height:13px;">; <img src="main_eq16845101826378195034.png" alt="$\rho\rightarrow$" style="width:25px;height:11px;"> densidade do meio; <img src="main_eq14285667881860132363.png" alt="$C_d\rightarrow$" style="width:34px;height:13px;"> aerodynamic drag coefficient; A <img src="main_eq11499031656375046629.png" alt="$\rightarrow$" style="width:13px;height:8px;"> frontal surface area; <img src="main_eq16876173721317610001.png" alt="$v_w\rightarrow$" style="width:33px;height:10px;"> wind speed; <img src="main_eq17774575464225102567.png" alt="$C_{rr}\rightarrow$" style="width:39px;height:13px;"> rolling resistance coefficient; <img src="main_eq11319871188381094158.png" alt="$m$" style="width:13px;height:7px;"> and <img src="main_eq07585311203459331132.png" alt="$g$" style="width:7px;height:10px;"> mass a gravity;</p><p>Considering <img src="main_eq12429941046748248203.png" alt="$f_m = 1.05$" style="width:61px;height:13px;"> and using the constant values from the table(I) of the laboratory script, one can compute the values of <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;">.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+ylabel(<span class="string">'Velocity [$km/h$]'</span>,<span class="string">'Interpreter'</span>, <span class="string">'latex'</span>);
+</pre><img vspace="5" hspace="5" src="main_02.png" alt=""> <h2 id="3">Vehicles Configurations and assumptions</h2><p>In the study there are 4 possible powertrain configurations of  light duty urban vehicles, presented in the figures (1), (2), (3) and (4). They consist of pure eletric, pure combustion, series hybrid and paralel hybrid.</p><p><h3>Pure Eletric Powertrain</h3></p><p>In this configuration the battery in series with the eletric motor/generator in series with the transmission. There are two possible modes of functioning, the motor discharging the batteries while accelerating, and the opposite, generator charging the batteries decelerating.</p><p><b>Acceleration:</b> During discharge the ciruit has an efficiency different of 100%. The overalll efficiecy <img src="main_eq16886558483641580768.png" alt="$\eta_{overall}$" style="width:39px;height:10px;"> is given by the product of the individual effinciency of each component of the circuit</p><p><img src="main_eq14504939581921429051.png" alt="$\eta_{overall}=\prod_{i=1}\eta_i$" style="width:103px;height:15px;">.</p><p>Thus, for this powertrain, one has that [$battery \rightarrow motor \rightarrow transmission$] will translate in a overall efficiency given by:</p><p><img src="main_eq05150811538145122500.png" alt="$\eta_{overall}=\eta_{battery}\eta_{motor}\eta_{transmission}$" style="width:204px;height:11px;"></p><div><ul><li>Assuming that the batteries are made from lithium-ion, according to <a href="https://en.wikipedia.org/wiki/Lithium-ion_battery">https://en.wikipedia.org/wiki/Lithium-ion_battery</a> it is reasonable to assume that the discharging effinciency of the battery of around 80%;</li><li>From <a href="https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency">https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency</a> it is reasonable to assume that the eletric motor has an efficiency of 70%;</li><li>From <a href="https://www.nap.edu/read/21744/chapter/7">https://www.nap.edu/read/21744/chapter/7</a> it is resonable to assume that the effinciecy of an automatic transmission is 90%; So the the overall discharging performance can be computed:</li></ul></div><pre class="codeinput">efficiency_battery_discharge = 0.8;
+efficiency_transmission = 0.9;
+efficiency_motor = 0.7;
+efficiency_pure_eletric_discharging = efficiency_battery_discharge*efficiency_motor*efficiency_transmission;
+</pre><p>Thus the eletric power in acceleration is given by:</p><p><img src="main_eq10519049995926428046.png" alt="$P_{eletric}= {P_{mecanic} \over \eta_{overall}}$" style="width:95px;height:21px;"></p><p><b>Deceleration</b> During deceleration, it is assumed that the motor works as a generator, recharging the battery. Although it is the same path as acceleration [$transmission \rightarrow generator \rightarrow battery], the efficiencies have different values.</p><div><ul><li>From it is reasonable to assume that the discharging effinciency of the battery of around 90%;</li><li>Its is reasonable to assume that the generator has an efficiency of 80%;</li><li>Similarly to the accelaration, it is reasonable to assume that the transmission has an efficiency of 90%; So the the overall charging performance can be computed:</li></ul></div><pre class="codeinput">efficiency_battery_charge = 0.9;
+effieciency_transmission = 0.9;
+efficiency_generator = 0.8;
+efficiency_pure_eletric_charging = efficiency_battery_charge*efficiency_generator*efficiency_transmission;
+</pre><p>Thus the eletric power in deceleration is given by:</p><p><img src="main_eq04642327719046476381.png" alt="$P_{eletric}= P_{mecanic}\eta_{overall}$" style="width:146px;height:14px;"></p><p><h3>Series Hybrid Powertrain</h3></p><p>In the configuration, there is a series connection between the fuel, the diesel generator, the battery pack, the motor/generator, and the transmission. Knowing that combustion engines only have a good performace in a narrow rpm band, called power band, it is assumed that, similiar do hybrid cars in the market, the car can operate in pure eletric mode for a velocities under 50 km/h and as a hybrid for highier velocities. (Good explanation on hybrid here <a href="https://www.youtube.com/watch?v=E_xCssR8qQI">https://www.youtube.com/watch?v=E_xCssR8qQI</a>) The eletric mode has the same efficiency as the pure eletric powertrain, So the efficiency of this power train can be:</p><div><ul><li>In eletrical mode, the <img src="main_eq00827285650021815269.png" alt="$\eta_{overall}=\eta_{overall-eletric}$" style="width:136px;height:10px;">;</li><li>According to <a href="https://en.wikipedia.org/wiki/Diesel_generator">https://en.wikipedia.org/wiki/Diesel_generator</a>, it is reasonable to assume that the performance of the diesel generator is 46%;</li></ul></div><p>Thus the overall performance is given by:</p><div><ul><li><img src="main_eq10058980217508504116.png" alt="$\eta_{overall} = \eta_{overall-eletric}$" style="width:136px;height:10px;">, when <img src="main_eq11094816885922138075.png" alt="$v<50 km/h$" style="width:79px;height:15px;"></li><li><img src="main_eq09406348908155006031.png" alt="$\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$" style="width:223px;height:11px;">, when <img src="main_eq05879762143486182419.png" alt="$v&gt;50 km/h$" style="width:79px;height:15px;"></li></ul></div><pre class="codeinput">efficiency_diesel_motor = 0.46;
+effienciency_hybrid_series_eletric_charging = efficiency_pure_eletric_charging;
+effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
+</pre><p><h3>Parallel Hybrid Powertrain</h3></p><p>The parallel power train, there are two path from the power source to the wheels:</p><div><ul><li>The series between the fuel, the engine and the transmisson;</li><li>The series between the battery, the motor/generator and the transmission;</li></ul></div><p>It is no notice that the engine can asct on the generator in order to charge the battery if needed. So, with this set up, we can consider that for velocieties up to <img src="main_eq08952849219070966086.png" alt="$50 km/h$" style="width:51px;height:15px;">, the powertrain functions in pure eletric mode, for velocities greater than <img src="main_eq08952849219070966086.png" alt="$50 km/h$" style="width:51px;height:15px;"> it works on pure combustion engine and finally for breaking it is assumed that regenerative breaking allways works. With this, the efficiencies considered are:</p><div><ul><li>According to <a href="https://en.wikipedia.org/wiki/Engine_efficiency">https://en.wikipedia.org/wiki/Engine_efficiency</a>, it is cosiderend that the motor is running on diesel engine, being of 46%.</li><li>The eletric path has the same efficiency as the pure eletric powertrain.</li></ul></div><pre class="codeinput">effienciency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
+effienciency_hybrid_parallel_combustion_discharging = efficiency_diesel_motor;
+</pre><h2 id="23">Power consumption</h2><p>In this section it is of interest to compare the power consumption between the different powertrains.</p><p>The objective os to calculate:</p><p><img src="main_eq01263242368827748294.png" alt="$P_T = F_Tv$" style="width:62px;height:13px;"></p><p>So first one must consider the traction force <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;"> on each car. The forces present are:</p><div><ul><li>Motor force;</li><li>Drag force;</li><li>Friction force;</li></ul></div><p><img src="main_eq06805382735451311472.png" alt="$$ F_T = f_m m a + F_{drag} + F_{friction}$$" style="width:188px;height:15px;"></p><p>Being:</p><div><ul><li><img src="main_eq16605206614134704508.png" alt="$F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$" style="width:187px;height:18px;"></li><li><img src="main_eq06929708968619120145.png" alt="$F_{friction} = C_{rr} m g v$" style="width:115px;height:15px;"></li></ul></div><p><img src="main_eq02096491867029288159.png" alt="$f_m \rightarrow mass factor$" style="width:116px;height:13px;">; <img src="main_eq16845101826378195034.png" alt="$\rho\rightarrow$" style="width:25px;height:11px;"> densidade do meio; <img src="main_eq14285667881860132363.png" alt="$C_d\rightarrow$" style="width:34px;height:13px;"> aerodynamic drag coefficient; A <img src="main_eq11499031656375046629.png" alt="$\rightarrow$" style="width:13px;height:8px;"> frontal surface area; <img src="main_eq16876173721317610001.png" alt="$v_w\rightarrow$" style="width:33px;height:10px;"> wind speed; <img src="main_eq17774575464225102567.png" alt="$C_{rr}\rightarrow$" style="width:39px;height:13px;"> rolling resistance coefficient; <img src="main_eq11319871188381094158.png" alt="$m$" style="width:13px;height:7px;"> and <img src="main_eq07585311203459331132.png" alt="$g$" style="width:7px;height:10px;"> mass a gravity;</p><p>Considering <img src="main_eq12429941046748248203.png" alt="$f_m = 1.05$" style="width:61px;height:13px;"> and using the constant values from the table(I) of the laboratory script, one can compute the values of <img src="main_eq17125751505883107878.png" alt="$F_T$" style="width:17px;height:13px;">.</p><pre class="codeinput">close <span class="string">all</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions
 %% Driving cycles
@@ -100,12 +114,12 @@ figure();
 plot(basic_time, basic_velocity);
 grid on;
 title('Basic urban driving cycle');
-xlabel('time [s]');
-ylabel('Velocity [v]');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 %%
 % <html><h3>Mix driving cycle</h3></html>
 %
-% Note that the Mix driving cycle is composed of urban and extra-urban
+% Note that the Mix-driving cycle is composed of urban and extra-urban
 % driving cycles, being the first the concatenation of basic urban driving
 % cycles.
 [mix_time, mix_velocity] = MixDrivingCycle(basic_time, basic_velocity);
@@ -114,10 +128,10 @@ plot(mix_time, mix_velocity);
 grid on;
 title('Basic urban driving cycle');
 xlabel('time $[s]$','Interpreter', 'latex');
-ylabel('Velocity [$v$]','Interpreter', 'latex');
+ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 
 %% Vehicles Configurations and assumptions
-% In the study there are 4 possible configurations of  light duty urban vehicles, presented in
+% In the study there are 4 possible powertrain configurations of  light duty urban vehicles, presented in
 % the figures (1), (2), (3) and (4). They consist of pure eletric, pure
 % combustion, series hybrid and paralel hybrid.
 %
@@ -143,22 +157,106 @@ ylabel('Velocity [$v$]','Interpreter', 'latex');
 %% 
 % * Assuming that the batteries are made from lithium-ion, according to
 % <https://en.wikipedia.org/wiki/Lithium-ion_battery> it is reasonable to assume that
-% the discharging effinciency of the battery of around 90%.
+% the discharging effinciency of the battery of around 80%;
 % * From <https://en.wikipedia.org/wiki/Electric_car#Energy_efficiency> it
-% is reasonable to assume that the eletric motor has an efficiency of 70%.
+% is reasonable to assume that the eletric motor has an efficiency of 70%;
 % * From <https://www.nap.edu/read/21744/chapter/7> it is resonable to
-% assume that the effinciecy of an automatic transmission is 90%.
+% assume that the effinciecy of an automatic transmission is 90%;
+% So the the overall discharging performance can be computed:
+efficiency_battery_discharge = 0.8;
+efficiency_transmission = 0.9;
+efficiency_motor = 0.7;
+efficiency_pure_eletric_discharging = efficiency_battery_discharge*efficiency_motor*efficiency_transmission;
+
 %% 
 % Thus the eletric power in acceleration is given by:
 %% 
-% $$Tesitng$$
+% $P_{eletric}= {P_{mecanic} \over \eta_{overall}}$
+%%
+% *Deceleration*
+% During deceleration, it is assumed that the motor works as a generator,
+% recharging the battery. Although it is the same path as acceleration [$transmission
+% \rightarrow generator \rightarrow battery], the efficiencies have
+% different values.
+%%
+% * From it is reasonable to assume that the discharging effinciency of the battery of around 90%;
+% * Its is reasonable to assume that the generator has an efficiency of
+% 80%;
+% * Similarly to the accelaration, it is reasonable to assume that the
+% transmission has an efficiency of 90%;
+% So the the overall charging performance can be computed:
+efficiency_battery_charge = 0.9;
+effieciency_transmission = 0.9;
+efficiency_generator = 0.8;
+efficiency_pure_eletric_charging = efficiency_battery_charge*efficiency_generator*efficiency_transmission;
+%% 
+% Thus the eletric power in deceleration is given by:
+%% 
+% $P_{eletric}= P_{mecanic}\eta_{overall}$
+%%
+%
+% <html><h3>Series Hybrid Powertrain</h3></html>
+%
+% In the configuration, there is a series connection between the fuel, the
+% diesel generator, the battery pack, the motor/generator, and the
+% transmission.
+% Knowing that combustion engines only have a good performace in a narrow
+% rpm band, called power band, it is assumed that, similiar do hybrid
+% cars in the market, the car can operate in pure eletric mode for a velocities
+% under 50 km/h and as a hybrid for highier velocities. (Good explanation on hybrid here <https://www.youtube.com/watch?v=E_xCssR8qQI>)
+% The eletric mode has the same efficiency as the pure eletric powertrain,
+% So the efficiency of this power train can be:
+%%
+% 
+% * In eletrical mode, the $\eta_{overall}=\eta_{overall-eletric}$;
+% * According to <https://en.wikipedia.org/wiki/Diesel_generator>, it is
+% reasonable to assume that the performance of the diesel generator is 46%;
+% 
+%%
+% Thus the overall performance is given by:
+%%
+% * $\eta_{overall} = \eta_{overall-eletric}$, when $v<50 km/h$
+% * $\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$, when $v>50 km/h$
+efficiency_diesel_motor = 0.46;
+effienciency_hybrid_series_eletric_charging = efficiency_pure_eletric_charging;
+effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
+
+%%
+%
+% <html><h3>Parallel Hybrid Powertrain</h3></html>
+%
+% The parallel power train, there are two path from the power source to the
+% wheels:
+%%
+% 
+% * The series between the fuel, the engine and the transmisson;
+% * The series between the battery, the motor/generator and the
+% transmission;
+% 
+%%
+% It is no notice that the engine can asct on the generator in order to
+% charge the battery if needed.
+% So, with this set up, we can consider that for velocieties up to $50
+% km/h$, the powertrain functions in pure eletric mode, for velocities
+% greater than $50 km/h$ it works on pure combustion engine and finally for
+% breaking it is assumed that regenerative breaking allways works.
+% With this, the efficiencies considered are:
+%%
+% 
+% * According to <https://en.wikipedia.org/wiki/Engine_efficiency>, it is
+% cosiderend that the motor is running on diesel engine, being of 46%. 
+% * The eletric path has the same efficiency as the pure eletric
+% powertrain.
+effienciency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
+effienciency_hybrid_parallel_combustion_discharging = efficiency_diesel_motor;
+
 %% Power consumption
 % In this section it is of interest to compare the power consumption between
-% the different vehicles.
+% the different powertrains.
 % 
 % The objective os to calculate:
 %% 
-% $$ P_T = F_Tv $$
+% $P_T = F_Tv$ 
 %%
 % So first one must consider the traction force $F_T$ on each car. The
 % forces present are:
@@ -182,6 +280,7 @@ ylabel('Velocity [$v$]','Interpreter', 'latex');
 % Considering $f_m = 1.05$ and using the constant values from the table(I) of the
 % laboratory script, one can compute the values of $F_T$.
 
+close all
 
 
 ##### SOURCE END #####
