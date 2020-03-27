@@ -1,16 +1,18 @@
 %% Potential of Eletric/Hybrid Propulsion Systems to Redute Petroluem Use and Greenhouse Gas Emissions
-%% Driving cycles
+%% Drawing the two driving cycles
 % In order to perform this study, the driving cycles were ploted in matLab.
 % Two types of driving cycles were used:
 %
 % <html><h3>Basic urbarn driving cycle</h3></html> 
 %
+%%
 clear
 close all
 clc
 [basic_time, basic_velocity] = BasicDrivingCycle();
 figure();
-plot(basic_time, basic_velocity);
+plot(basic_time, basic_velocity, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
 grid on;
 title('Basic urban driving cycle');
 xlabel('time $[s]$','Interpreter', 'latex');
@@ -21,11 +23,13 @@ ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 % Note that the Mix-driving cycle is composed of urban and extra-urban
 % driving cycles, being the first the concatenation of basic urban driving
 % cycles.
+%%
 [mix_time, mix_velocity] = MixDrivingCycle(basic_time, basic_velocity);
 figure()
-plot(mix_time, mix_velocity);
+plot(mix_time, mix_velocity, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
 grid on;
-title('Basic urban driving cycle');
+title(' Mix-driving cycle');
 xlabel('time $[s]$','Interpreter', 'latex');
 ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 
@@ -34,7 +38,7 @@ ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 % the figures (1), (2), (3) and (4). They consist of pure eletric, pure
 % combustion, series hybrid and paralel hybrid.
 %
-% <html><h3>Pure Eletric Powertrain</h3></html>
+%% Assumptions: Pure Eletric Powertrain
 % 
 % In this configuration the battery in series with the eletric
 % motor/generator in series with the transmission.
@@ -62,9 +66,10 @@ ylabel('Velocity [$km/h$]','Interpreter', 'latex');
 % * From <https://www.nap.edu/read/21744/chapter/7> it is resonable to
 % assume that the effinciecy of an automatic transmission is 90%;
 % So the the overall discharging performance can be computed:
+%%
 efficiency_battery_discharge = 0.8;
 efficiency_transmission = 0.9;
-efficiency_motor = 0.7;
+efficiency_motor = 0.8;
 efficiency_pure_eletric_discharging = efficiency_battery_discharge*efficiency_motor*efficiency_transmission;
 
 %% 
@@ -84,17 +89,17 @@ efficiency_pure_eletric_discharging = efficiency_battery_discharge*efficiency_mo
 % * Similarly to the accelaration, it is reasonable to assume that the
 % transmission has an efficiency of 90%;
 % So the the overall charging performance can be computed:
+%%
 efficiency_battery_charge = 0.9;
-effieciency_transmission = 0.9;
-efficiency_generator = 0.8;
+efficiency_transmission = 0.9;
+efficiency_generator = 0.7;
 efficiency_pure_eletric_charging = efficiency_battery_charge*efficiency_generator*efficiency_transmission;
 %% 
 % Thus the eletric power in deceleration is given by:
 %% 
 % $P_{eletric}= P_{mecanic}\eta_{overall}$
-%%
-%
-% <html><h3>Series Hybrid Powertrain</h3></html>
+
+%% Asusmptions: Series Hybrid Powertrain
 %
 % In the configuration, there is a series connection between the fuel, the
 % diesel generator, the battery pack, the motor/generator, and the
@@ -109,21 +114,20 @@ efficiency_pure_eletric_charging = efficiency_battery_charge*efficiency_generato
 % 
 % * In eletrical mode, the $\eta_{overall}=\eta_{overall-eletric}$;
 % * According to <https://en.wikipedia.org/wiki/Diesel_generator>, it is
-% reasonable to assume that the performance of the diesel generator is 46%;
+% reasonable to assume that the performance of the diesel generator is 65%;
 % 
 %%
 % Thus the overall performance is given by:
 %%
-% * $\eta_{overall} = \eta_{overall-eletric}$, $when $v<50 km/h$
-% * $\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$when $v>50 km/h$
-efficiency_diesel_motor = 0.46;
-effienciency_hybrid_series_eletric_charging = efficiency_pure_eletric_charging;
-effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
-
+% * $\eta_{overall} = \eta_{overall-eletric}$, when $v<50 km/h$
+% * $\eta_{overall} = \eta_{overall-eletric}\eta_{diesel-generator}$, when $v>50 km/h$
 %%
-%
-% <html><h3>Parallel Hybrid Powertrain</h3></html>
-%
+efficiency_diesel_generator = 0.65;
+efficiency_hybrid_series_eletric_charging = efficiency_pure_eletric_charging;
+efficiency_hybrid_series_eletric_discharging = efficiency_pure_eletric_discharging;
+efficiency_hybrid_series_eletric_combustion_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_generator;
+
+%% Assumptions: Parallel Hybrid Powertrain
 % The parallel power train, there are two path from the power source to the
 % wheels:
 %%
@@ -146,10 +150,18 @@ effienciency_hybrid_series_eletric_discharging = efficiency_pure_eletric_dischar
 % cosiderend that the motor is running on diesel engine, being of 46%. 
 % * The eletric path has the same efficiency as the pure eletric
 % powertrain.
-effienciency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
-effienciency_hybrid_parallel_eletric_discharging = efficiency_pure_eletric_discharging*efficiency_diesel_motor;
-
-%% Power consumption
+%%
+efficiency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
+efficiency_hybrid_parallel_eletric_discharging = efficiency_pure_eletric_discharging;
+efficiency_hybrid_parallel_combustion_discharging = 0.46;
+%% Assumptions: Pure Combustion Powertrain
+% 
+% This powertrain is fairly straight forward, being it's efficiency just
+% the efficiency of the diesel motor.
+%%
+efficiency_pure_combustion_discharging = 0.46;
+%% Power Consumption
+%% Power Consumption: Theoretical Approach
 % In this section it is of interest to compare the power consumption between
 % the different powertrains.
 % 
@@ -168,16 +180,253 @@ effienciency_hybrid_parallel_eletric_discharging = efficiency_pure_eletric_disch
 %%
 % Being:
 %%
-% * $F_{drag} = {1 \over 2} \rho C_d A v(v-(-v_w))^2)$
-% * $F_{friction} = C_{rr} m g v$ 
+% * $F_{drag} = {1 \over 2} \rho C_d A (v-(-v_w))^2)$
+% * $F_{friction} = C_{rr} m g$ 
 %% 
 % $f_m \rightarrow mass factor$; $\rho\rightarrow$ densidade do meio; 
 % $C_d\rightarrow$ aerodynamic drag coefficient; A $\rightarrow$ frontal 
 % surface area; $v_w\rightarrow$ wind speed; $C_{rr}\rightarrow$ rolling  
 % resistance coefficient; $m$ and $g$ mass a gravity;
 %%
-% Considering $f_m = 1.05$ and using the constant values from the table(I) of the
+% Considering $f_m = 1.05$, $\rho = 1.225 kg/m^3$, $v_w = 25 km/h$ and using the constant values from the table(I) of the
 % laboratory script, one can compute the values of $F_T$.
+%%
+air_density = 1.225;
+mass_factor = 1.05;
+drag_coefficient = 0.25;
+surface_area = 2.7;
+wind_speed = (25/3.6);
+rolling_resistance_coefficient = 0.018;
+mass = 1400;
+gravity = 9.8;
+%% Power Consumption: Computations Function
+% *Function used to calculate the evolution of the powers in the driving
+% cycles:*
+%%
+%
+%   function [power] = AuxPowerCalculator(mechanical_power_basic_cycle, velocity, power, efficiency_breaking, efficiency_under_50, efficiency_over_50) 
+%     for  i=1:length(mechanical_power_basic_cycle)
+%         % When the system is breaking
+%         if(mechanical_power_basic_cycle(i) < 0)
+%             power(i) = mechanical_power_basic_cycle(i) * efficiency_breaking;
+%         end
+%         % When the system's velocity is under 50km/h and not breaking
+%         if(mechanical_power_basic_cycle(i) > 0 && velocity(i) < 50 && velocity(i) >= 0)
+%             power(i) = mechanical_power_basic_cycle(i) / efficiency_under_50;
+%         end
+%         % When the system's velocity is over 50km/h and not breaking
+%         if (mechanical_power_basic_cycle(i) > 0 && velocity(i) >= 50)
+%             power(i) = mechanical_power_basic_cycle(i) / efficiency_over_50;
+%         end
+%     end
+%   end
+%% Power Consumption: Show results
+% In order to more easily show the results of each system, the mechanical
+% power and the system output power are ploted at the same time, in order
+% to better see the effect of the different efficiencies:
+% For that, the following function was created
+%% 
+%   function [] = AuxShowPowerResults(time, power, mechanical_power, power_train)
+%     figure()
+%     plot(time, power/1000, time, mechanical_power/1000, 'LineWidth', 1);
+%     set( gca, 'FontSize', 11);
+%     title(sprintf('Power Consumption of %s Powertrain', power_train));
+%     xlabel('time $[s]$','Interpreter', 'latex');
+%     ylabel('Power [$kW$]','Interpreter', 'latex');
+%     legend( sprintf('%s Output Power', power_train), 'Mechanical Power');
+%     grid on;
+%   end
+%% Power Consumption: Basic Driving Cycle
+% Given the theoretical and functional approach taken above, the power 
+% consumption can be computed.
+% First the acceleration vector is necessary in order to cumpute the
+% force.
+%%
+% The basic velocity must be converted from $km/h$ to $m/s$:
+basic_velocity = basic_velocity/3.6;
+time_step = basic_time(4) - basic_time(3);
+basic_acceleration = diff(basic_velocity)/time_step;
+% It is necessary to pop the last value of the time and velocity arrays due
+% to the previous derivative:
+basic_time(end) = [];
+basic_velocity(end) = [];
+figure();
+plot(basic_time, basic_acceleration, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('Acceleration of Basic Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Acceleration [$m/s^2$]','Interpreter', 'latex');
+grid on;
+%% 
+% The mechanical power involved is compueted by:
+%%
+force_motor = mass_factor * mass * basic_acceleration;
+force_drag = 0.5 * air_density * drag_coefficient * surface_area * (basic_velocity + wind_speed).^2;
+force_friction = rolling_resistance_coefficient * mass * gravity;
+force_traction = force_motor + force_drag +  force_friction;
+mechanical_power_basic_cycle = force_traction.*basic_velocity;
+figure();
+plot(basic_time, mechanical_power_basic_cycle/1000, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('Power Consumption of Basic Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Mechanical Power [$kW$]','Interpreter', 'latex');
+grid on;
+%%
+% It is to notice that the negative values of power correspond to power
+% from breaking, this power is used by the regenerative breaking (if in
+% operation).
+%% Power Consumption: Pure Eletric in Basic Driving Cycle
+% Now, in order to calculate the power consumption carried by the pure
+% eletric power train. It will work in the follwing manner:
+%%
+% 
+% * When the car is accelerating, the efficiency of discharged is appliend
+% in the power calculation;
+% * When the car is decelerating, the efficiency of the charge is apploed
+% in the power calculation;
+% 
+%% 
+% Thus, for the pure eletric powertrain the power is given  by:
+%%
+pure_eletric_power_basic_cycle = zeros(1, length(mechanical_power_basic_cycle));
+pure_eletric_power_basic_cycle = AuxPowerCalculator(mechanical_power_basic_cycle, basic_velocity, pure_eletric_power_basic_cycle, efficiency_pure_eletric_charging, efficiency_pure_eletric_discharging, efficiency_pure_eletric_discharging);
+AuxShowPowerResults(basic_time, pure_eletric_power_basic_cycle, mechanical_power_basic_cycle, 'Pure Eletric');
+%% 
+% As one can see on the figure above, as expected the electrical power
+% consuption is greater than the mechanical power consumption, and I
+% doesn't regenerate all the power available in the regenerative-breaking 
+% periods.
+%% Power Consumption: Series Hybrid in Basic Driving Cycle
+%
+% This power train will behave in the following manner:
+%%
+% 
+% * When the velocity is less than $50km/h$, the car will run o eletric
+% power only;
+% * When the car reaches the $50km/h$ mark, it will turn on the diesel
+% generator;
+% 
+%%
+series_hybrid_eletric_power_basic_cycle = zeros(1, length(basic_acceleration));
+series_hybrid_eletric_power_basic_cycle = AuxPowerCalculator(mechanical_power_basic_cycle, basic_velocity,series_hybrid_eletric_power_basic_cycle, efficiency_hybrid_series_eletric_charging, efficiency_hybrid_series_eletric_discharging, efficiency_hybrid_series_eletric_combustion_discharging);
+AuxShowPowerResults(basic_time, series_hybrid_eletric_power_basic_cycle, mechanical_power_basic_cycle, 'Series Hybrid');
+ %%
+ % From the plot above it is possible to see that, for this velocity cycle,
+ % the eletrical power consuption is the same for the series hybrid powertrain
+ % and the pure eletric powertrain.
+ 
+%% Power Consumption: Parallel Hybrid in Basic Driving Cycle
+% This power train will behave in the following manner:
+%%
+% 
+% * When the velocity is less than $50km/h$, the car will run o eletric
+% power only;
+% * When the car reaches the $50km/h$ mark, it will turn on the combustion
+% engine;
+% 
 
-close all
+parallel_hybrid_eletric_power_basic_cycle = zeros(1, length(basic_acceleration));
+parallel_hybrid_eletric_power_basic_cycle = AuxPowerCalculator(mechanical_power_basic_cycle, basic_velocity, parallel_hybrid_eletric_power_basic_cycle, efficiency_hybrid_parallel_eletric_charging, efficiency_hybrid_parallel_eletric_discharging , efficiency_hybrid_parallel_combustion_discharging);
+AuxShowPowerResults(basic_time, parallel_hybrid_eletric_power_basic_cycle, mechanical_power_basic_cycle, 'Parallel Hybrid');
+%%
+% As expected, once again the hybrid vehicle has the same eletrical power
+% consumption as a pure electrical vehicle, due to the velocities praticed.
+%% Power Consumption: Pure Combustion in Basic Driving Cycle
+% The power combustion power will have allways the same efficiency when it 
+% is accelerating, and during breaking it will not spend or restore any energy. 
+%% 
+pure_combustion_power_basic_cycle = zeros(1, length(mechanical_power_basic_cycle));
+pure_combustion_power_basic_cycle = AuxPowerCalculator(mechanical_power_basic_cycle, basic_velocity, pure_combustion_power_basic_cycle, 0, efficiency_pure_combustion_discharging , efficiency_pure_combustion_discharging);
+AuxShowPowerResults(basic_time, pure_combustion_power_basic_cycle, mechanical_power_basic_cycle, 'Pure Combustion');
 
+%%
+% As expected when the mechanical power is zero or negative, the combustion
+% power will be zero.
+%% Power consumption: Mixed Driving Cycle
+% Similar to what was done for the basic driving cycle, the acceleration
+% and the mechanical power wil be computed, and then through the
+% AuxPowerCalculator() function, the power consumption of each power train
+% will be studied.
+%%
+mix_velocity = mix_velocity/3.6;
+time_step = mix_time(4) - mix_time(3);
+mix_acceleration = diff(mix_velocity)/time_step;
+% It is necessary to pop the last value of the time and velocity arrays due
+% to the previous derivative:
+mix_time(end) = [];
+mix_velocity(end) = [];
+figure();
+plot(mix_time, mix_acceleration, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('Acceleration of Mix Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Acceleration [$m/s^2$]','Interpreter', 'latex');
+grid on;
+%%
+% The forces involved in the system remain the same, thus, the mechanical
+% power can be computated:
+%%
+force_motor = mass_factor * mass * mix_acceleration;
+force_drag = 0.5 * air_density * drag_coefficient * surface_area * (mix_velocity + wind_speed).^2;
+force_friction = rolling_resistance_coefficient * mass * gravity;
+force_traction = force_motor + force_drag +  force_friction;
+mechanical_power_mix_cycle = force_traction.*mix_velocity;
+figure();
+plot(mix_time, mechanical_power_mix_cycle/1000, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('Power Consumption of Mix Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Mechanical Power [$kW$]','Interpreter', 'latex');
+grid on;
+
+%%
+% The powertrains will mantain the same efficiencies as before, *but* it is
+% to *notice* that for this driving cycle, the effect of velocities equal/above 50
+% km/h will be more evident.
+
+%% Power Consumption: Pure Eletric in Mix Driving Cycle
+pure_eletric_power_mix_cycle = zeros(1, length(mechanical_power_mix_cycle));
+pure_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity, pure_eletric_power_mix_cycle, efficiency_pure_eletric_charging, efficiency_pure_eletric_discharging, efficiency_pure_eletric_discharging);
+AuxShowPowerResults(mix_time, pure_eletric_power_mix_cycle, mechanical_power_mix_cycle, 'Pure Eletric');
+%% Power Consumption: Series Hybrid in Mix Driving Cycle
+series_hybrid_eletric_power_mix_cycle = zeros(1, length(mix_acceleration));
+series_hybrid_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity,series_hybrid_eletric_power_mix_cycle, efficiency_hybrid_series_eletric_charging, efficiency_hybrid_series_eletric_discharging, efficiency_hybrid_series_eletric_discharging);
+AuxShowPowerResults(mix_time, series_hybrid_eletric_power_mix_cycle, mechanical_power_mix_cycle, 'Series Hybrid');
+%% Power Consumption: Parallel Hybrid in Mix Driving Cycle
+parallel_hybrid_eletric_power_mix_cycle = zeros(1, length(mix_acceleration));
+parallel_hybrid_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity, parallel_hybrid_eletric_power_mix_cycle, efficiency_hybrid_parallel_eletric_charging, efficiency_hybrid_parallel_eletric_discharging , efficiency_hybrid_parallel_combustion_discharging);
+AuxShowPowerResults(mix_time, parallel_hybrid_eletric_power_mix_cycle, mechanical_power_mix_cycle, 'Parallel Hybrid');
+%% Power Consumption: Pure Combustion in Mix Driving Cycle
+pure_combustion_power_mix_cycle = zeros(1, length(mix_acceleration));
+pure_cumbustion_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity, pure_combustion_power_mix_cycle, 0, efficiency_pure_combustion_discharging, efficiency_pure_combustion_discharging);
+AuxShowPowerResults(mix_time, pure_cumbustion_power_mix_cycle, mechanical_power_mix_cycle, 'Parallel Hybrid');
+%% Power Consumption: Comparison
+% In order to better visualize the comparison of all systems, the following
+% plot shows all power consumptions side to side:
+%%
+figure()
+plot(mix_time, pure_eletric_power_mix_cycle/1000, mix_time, pure_combustion_power_mix_cycle/1000, mix_time, series_hybrid_eletric_power_mix_cycle/1000, mix_time, parallel_hybrid_eletric_power_mix_cycle/1000, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('All Systems Power Consumption on Mix Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Power [$kW$]','Interpreter', 'latex');
+legend('Pure Eletric', 'Pure Combustion', 'Series Hybrid', 'Parallel Hybrid');
+grid on;
+
+%%
+figure()
+plot(basic_time, pure_eletric_power_basic_cycle/1000, basic_time, pure_combustion_power_basic_cycle/1000, basic_time, series_hybrid_eletric_power_basic_cycle/1000, basic_time, parallel_hybrid_eletric_power_basic_cycle/1000, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('All Systems Power Consumption on Basic Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Power [$kW$]','Interpreter', 'latex');
+legend('Pure Eletric', 'Pure Combustion', 'Series Hybrid', 'Parallel Hybrid');
+grid on;
+
+
+
+
+
+
+ 
