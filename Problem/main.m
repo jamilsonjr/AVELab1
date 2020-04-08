@@ -147,19 +147,19 @@ efficiency_hybrid_series_eletric_combustion_discharging = efficiency_pure_eletri
 %%
 % 
 % * According to <https://en.wikipedia.org/wiki/Engine_efficiency>, it is
-% cosiderend that the motor is running on diesel engine, being of 46%. 
+% cosiderend that the motor is running on diesel engine, being of 30%. 
 % * The eletric path has the same efficiency as the pure eletric
 % powertrain.
 %%
 efficiency_hybrid_parallel_eletric_charging = efficiency_pure_eletric_charging;
 efficiency_hybrid_parallel_eletric_discharging = efficiency_pure_eletric_discharging;
-efficiency_hybrid_parallel_combustion_discharging = 0.46;
+efficiency_hybrid_parallel_combustion_discharging = 0.30;
 %% Assumptions: Pure Combustion Powertrain
 % 
 % This powertrain is fairly straight forward, being it's efficiency just
 % the efficiency of the diesel motor.
 %%
-efficiency_pure_combustion_discharging = 0.46;
+efficiency_pure_combustion_discharging = 0.30;
 %% Power Consumption
 %% Power Consumption: Theoretical Approach
 % In this section it is of interest to compare the power consumption between
@@ -220,7 +220,7 @@ gravity = 9.8;
 %         end
 %     end
 %   end
-%% Power Consumption: Show results
+%% Power Consumption: Show Results Function
 % In order to more easily show the results of each system, the mechanical
 % power and the system output power are ploted at the same time, in order
 % to better see the effect of the different efficiencies:
@@ -391,7 +391,7 @@ pure_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mi
 AuxShowPowerResults(mix_time, pure_eletric_power_mix_cycle, mechanical_power_mix_cycle, 'Pure Eletric');
 %% Power Consumption: Series Hybrid in Mix Driving Cycle
 series_hybrid_eletric_power_mix_cycle = zeros(1, length(mix_acceleration));
-series_hybrid_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity,series_hybrid_eletric_power_mix_cycle, efficiency_hybrid_series_eletric_charging, efficiency_hybrid_series_eletric_discharging, efficiency_hybrid_series_eletric_discharging);
+series_hybrid_eletric_power_mix_cycle = AuxPowerCalculator(mechanical_power_mix_cycle, mix_velocity,series_hybrid_eletric_power_mix_cycle, efficiency_hybrid_series_eletric_charging, efficiency_hybrid_series_eletric_discharging, efficiency_hybrid_series_eletric_combustion_discharging);
 AuxShowPowerResults(mix_time, series_hybrid_eletric_power_mix_cycle, mechanical_power_mix_cycle, 'Series Hybrid');
 %% Power Consumption: Parallel Hybrid in Mix Driving Cycle
 parallel_hybrid_eletric_power_mix_cycle = zeros(1, length(mix_acceleration));
@@ -409,6 +409,38 @@ AuxShowPowerResults(mix_time, pure_cumbustion_power_mix_cycle, mechanical_power_
 %%
 figure()
 hold all
+plot(basic_time, pure_eletric_power_basic_cycle/1000, 'LineWidth', 1);
+plot( basic_time, pure_combustion_power_basic_cycle/1000, 'LineWidth', 1);
+plot( basic_time, series_hybrid_eletric_power_basic_cycle/1000, 'LineWidth', 1);
+plot( basic_time, parallel_hybrid_eletric_power_basic_cycle/1000, 'LineWidth', 1);
+set( gca, 'FontSize', 11);
+title('All Systems Power Consumption on Basic Driving Cycle');
+xlabel('time $[s]$','Interpreter', 'latex');
+ylabel('Power [$kW$]','Interpreter', 'latex');
+legend('Pure Eletric', 'Pure Combustion', 'Series Hybrid', 'Parallel Hybrid');
+grid on;
+%% 
+% One can see that, for the basic driving cycle, the combustion powertrain
+% performs worse when compared to the eletric and hybrid powertrains, due
+% to the intrinsic low efficiency of the diesel motor.
+% For speed under 50 km/h, the eletric, the paralel hybrid and the series
+% hybrid perform the same way, given that in the speed range from 0 to 50
+% km/h they all fuction like pure eletric power trains. However one can see
+% the diference when the speed reaches 50 km/h in the 150 seconds mark:
+%%
+% 
+% * The eletric car consumes less power, due to it's simplicity and high
+% efficiency;
+% * After comes the series hybrid, that for this speed, has a diesel
+% generator charging the batteries;
+% * And finally comes the parallel hybrid, that performs worse because for
+% this speed, it function like a pure combustion motor, that has a
+% performance even worse than the diesel generator;
+% 
+
+%%
+figure()
+hold all
 plot( mix_time, pure_cumbustion_power_mix_cycle/1000);
 plot(mix_time, pure_eletric_power_mix_cycle/1000);
 plot( mix_time, series_hybrid_eletric_power_mix_cycle/1000);
@@ -421,22 +453,153 @@ legend('Pure Combustion','Pure Eletric', 'Series Hybrid', 'Parallel Hybrid');
 grid on;
 
 %%
-figure()
-hold all
-plot(basic_time, pure_eletric_power_basic_cycle/1000, 'LineWidth', 1);
-plot( basic_time, pure_combustion_power_basic_cycle/1000, 'LineWidth', 1);
-plot( basic_time, series_hybrid_eletric_power_basic_cycle/1000, 'LineWidth', 1);
-plot( basic_time, parallel_hybrid_eletric_power_basic_cycle/1000, 'LineWidth', 1);
-set( gca, 'FontSize', 11);
-title('All Systems Power Consumption on Basic Driving Cycle');
-xlabel('time $[s]$','Interpreter', 'latex');
-ylabel('Power [$kW$]','Interpreter', 'latex');
-legend('Pure Eletric', 'Pure Combustion', 'Series Hybrid', 'Parallel Hybrid');
-grid on;
+% Finally, in the mixed driving cycle, one can observe that for the urban
+% part of the cycle, the same conclusions drawn as for basic driving cycle
+% are valid here. For the extra-urban part of the cycle, one can notice
+% that:
+%%
+% 
+% * As allways, the pure eletric car has the best performace of all the power trains;
+% * Next comes the series hybrid, that has it's efficiency diminished due
+% presence of the disel generator, that for these speeds power the battery;
+% * Finally, the paralel hybrid and the pure combustion powertrains perfom
+% the worst, due to the low efficiency of the diesel motor;
+% 
+
+%% Energy Recovery 
+% The powertrains that have an eletric motor/generator, can harnest the
+% power of the breaking to restore the energy in the batteries. In this
+% section, the quantity of this saved energy will be studied for each
+% powertrains in each driving cycle.
+%% Energy Recovery: Theorethical approach
+% The energy recovered will correspond to the negative part of the graphics
+% of the powerconsumption calculated above. It is to notice that the efficiency
+% of charging is not the same as discharging, due to, bettwen other factor 
+% related to the components, losses by heat.
+% As it is expected, the pure combustion powertrain does not have negative 
+% power consumption, because it does not have the components to restore energy.
+% So in order to compute the total recovered energy, one must simpli
+% integrate the negative part of the power consumption graphs.
+%% Energy Recovery: Computations function
+% The function used to compute the power recovery is the following:
+%% 
+%   function [energy_recovered, energy_spent] = AuxEnergyRecoveryCalculator(time, power_consumption)
+%       % Filter only the negative values of the plot and pass them to positive
+%       % value
+%       power_recovered = power_consumption;
+%       power_spent = power_consumption;
+%       % Energy recovered
+%       for i=1:length(power_consumption)
+%           if(power_recovered(i) > 0)
+%               power_recovered(i) = 0;
+%           else
+%               power_recovered(i) = -power_recovered(i);
+%           end
+%       end
+%       energy_recovered  = trapz(time, power_recovered);
+%       % Energy spent
+%       for i=1:length(power_consumption)
+%           if(power_spent(i) < 0)
+%               power_spent(i) = 0;
+%           end
+%       end
+%       energy_spent  = trapz(time, power_spent);
+%   end
+
+%% Energy Recovery: Pure Eletric Powertrain Basic Driving Cycle
+[energy_recovered_basic_cycle, energy_spent_basic_cycle] = AuxEnergyCalculator(basic_time, pure_eletric_power_basic_cycle);
+%% 
+% For the basic driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_basic_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_basic_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_basic_cycle/energy_spent_basic_cycle)*100);
 
 
+%% Energy Recovery: Series Hybrid Powertrain Basic Driving Cycle
+[energy_recovered_basic_cycle, energy_spent_basic_cycle] = AuxEnergyCalculator(basic_time, series_hybrid_eletric_power_basic_cycle);
+%% 
+% For the basic driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_basic_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_basic_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_basic_cycle/energy_spent_basic_cycle)*100);
+
+%% Energy Recovery: Parallel Hybrid Powertrain Basic Driving Cycle
+[energy_recovered_basic_cycle, energy_spent_basic_cycle] = AuxEnergyCalculator(basic_time, parallel_hybrid_eletric_power_basic_cycle);
+%% 
+% For the basic driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_basic_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_basic_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_basic_cycle/energy_spent_basic_cycle)*100);
+%% Energy Recovered: Conclusion Basic Cyle
+% For this driving cycle, pure eletric powertrain perfomed better, with ~9.5% of
+% energy recovery, followed by the series hybrid which recovered ~8.7%, followed
+% by the parallel hybrid which recovered ~8.3% and lastly the pure combustion
+% which can't recover any energy. 
+% Even though the hybrids and the eletric recover energy the same way, the reason that 
+% they show a different value in the percentage of energy recovered is because they
+% spend a different amounts.
+
+%% Energy Recovery: Pure Eletric Powertrain Mix Driving Cycle
+[energy_recovered_mix_cycle, energy_spent_mix_cycle] = AuxEnergyCalculator(mix_time, pure_eletric_power_mix_cycle);
+%% 
+% For the mix driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_mix_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_mix_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_mix_cycle/energy_spent_mix_cycle)*100);
 
 
+%% Energy Recovery: Series Hybrid Powertrain Mix Driving Cycle
+[energy_recovered_mix_cycle, energy_spent_mix_cycle] = AuxEnergyCalculator(mix_time, series_hybrid_eletric_power_mix_cycle);
+%% 
+% For the mix driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_mix_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_mix_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_mix_cycle/energy_spent_mix_cycle)*100);
 
-
- 
+%% Energy Recovery: Parallel Hybrid Powertrain Mix Driving Cycle
+[energy_recovered_mix_cycle, energy_spent_mix_cycle] = AuxEnergyCalculator(mix_time, parallel_hybrid_eletric_power_mix_cycle);
+%% 
+% For the mix driving cycle, the energy spent, in kWh equal to:
+display(energy_spent_mix_cycle/(1000*3600));
+%%
+% And the energy recovered, in kWh is equal to:
+display(energy_recovered_mix_cycle/(1000*3600));
+%%
+% One can conclude that the percentage of the energy recovered by this powertrain is:
+%%
+display((energy_recovered_mix_cycle/energy_spent_mix_cycle)*100);
+%% Energy Recovered: Conclusion Mix Cyle
+% As expected, the powertrains that spend less energy have a greater
+% percentage of the energy recovered. The pure eletric vehicle recovers
+% ~5.4%, followed by the serie hybrid which recovers ~3.9%, followed by the
+% parallel hybrid that recovers ~3.3% of the energy.
+% Thus, I is noticible that for the extra-urban cycle, the energy recovery
+% does not have such great reasult as the urban cycle.
+% It is also to notice that in a real life cenario, not all breakings
+% correspond to a regenerative break, because if it is needed do break
+% faster, mechanical breaking is necessary.
