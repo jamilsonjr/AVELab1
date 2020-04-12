@@ -1,4 +1,4 @@
-function [energy_recovered, energy_spent] = AuxEnergyRecoveryCalculator(time, power_consumption)
+function [energy_recovered, energy_spent] = AuxEnergyCalculator(time, power_consumption)
     % Filter only the negative values of the plot and pass them to positive
     % value
     power_recovered = power_consumption;
